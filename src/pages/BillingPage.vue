@@ -36,7 +36,8 @@
 
             <q-select
               v-model="selectedVeg"
-              :options="filteredVegOptions"
+              :options="filteredOptions"
+              option-label="item_name"
               label="Vegetable"
               outlined
               dense
@@ -44,7 +45,7 @@
               hide-selected
               fill-input
               :input-debounce="0"
-              @filter="filterFn"
+              @filter="filterVegetables"
               ref="vegSelectRef"
               @update:model-value="onVegSelect"
             />
@@ -143,20 +144,22 @@ const qty = ref('')
 const unitPrice = ref('')
 const billItems = ref([])
 const vegItemsFromDB = ref([])
-const vegOptions = ref([])
 const vegSelectRef = ref(null)
-const filteredVegOptions = ref([])
+const filteredOptions = ref([])
 
-function filterFn(val, update) {
+const filterVegetables = (val, update) => {
   if (val === '') {
     update(() => {
-      filteredVegOptions.value = vegOptions.value
+      filteredOptions.value = vegItemsFromDB.value
     })
     return
   }
+
   update(() => {
     const needle = val.toLowerCase()
-    filteredVegOptions.value = vegOptions.value.filter((o) => o.toLowerCase().includes(needle))
+    filteredOptions.value = vegItemsFromDB.value.filter(
+      v => v.item_name.toLowerCase().indexOf(needle) > -1
+    )
   })
 }
 
@@ -178,11 +181,10 @@ const grandTotal = computed(() => billItems.value.reduce((sum, item) => sum + it
 onMounted(async () => {
   try {
     $q.loading.show()
-    const { data, error } = await supabase.from('veg_prices').select('*')
+    const { data, error } = await supabase.from('veg_prices').select('*').order('item_name')
     if (error) throw error
     vegItemsFromDB.value = data
-    vegOptions.value = data.map((v) => v.item_name)
-    filteredVegOptions.value = vegOptions.value
+    filteredOptions.value = data
   } catch (error) {
     console.error(error)
   } finally {
@@ -191,12 +193,18 @@ onMounted(async () => {
 })
 
 const onVegSelect = (val) => {
-  const found = vegItemsFromDB.value.find((v) => v.item_name === val)
-  if (found) unitPrice.value = found.unit_price
+  if (!val) return
+  if (typeof val === 'object') {
+    unitPrice.value = val.unit_price
+  } else {
+    const found = vegItemsFromDB.value.find((v) => v.item_name === val)
+    if (found) unitPrice.value = found.unit_price
+  }
 }
 
 const addItem = () => {
   if (!selectedVeg.value || !qty.value) return
+  const itemName = typeof selectedVeg.value === 'object' ? selectedVeg.value.item_name : selectedVeg.value
   let price = 0
   let total = 0
   if (billType.value === 'with_price') {
@@ -204,7 +212,7 @@ const addItem = () => {
     total = Number(qty.value) * price
   }
   billItems.value.push({
-    item_name: selectedVeg.value,
+    item_name: itemName,
     qty: Number(qty.value),
     unit_price: price,
     total_price: total,
