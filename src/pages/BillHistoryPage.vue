@@ -23,6 +23,8 @@
           :loading="loading"
           selection="multiple"
           v-model:selected="selectedBills"
+          :rows-per-page-options="[0]"
+          :pagination="{ rowsPerPage: 0 }"
         >
           <template v-slot:body-cell-actions="props">
             <q-td :props="props">
@@ -287,10 +289,9 @@ async function printBill(bill) {
     <body>
       <div class="container">
         <div class="header">
-          <h1>ABEYSEKERA SUPPLIERS</h1>
-          <p>LankaFruit</p>
-          <p>[Address]</p>
-          <p>[Phone]</p>
+          <h1>ABEYSEKERA SUPPLIERS PVT LTD</h1>
+          <p>Abhaya Niwasa, Karunarathna Road, Mullapitiya, Beruwala</p>
+          <p>071 1344675 | 0714752776</p>
         </div>
 
         <div class="info-section">
@@ -429,10 +430,9 @@ const downloadBill = async (bill) => {
     <body>
       <div class="container">
         <div class="header">
-          <h1>ABEYSEKERA SUPPLIERS</h1>
-          <p>LankaFruit</p>
-          <p>[Address]</p>
-          <p>[Phone]</p>
+          <h1>ABEYSEKERA SUPPLIERS PVT LTD</h1>
+          <p>Abhaya Niwasa, Karunarathna Road, Mullapitiya, Beruwala</p>
+          <p>071 1344675 | 0714752776</p>
         </div>
 
         <div class="info-section">
