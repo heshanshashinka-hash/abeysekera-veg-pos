@@ -34,7 +34,7 @@
                   v-model.number="props.row.unit_price"
                   dense
                   outlined
-                  style="max-width: 150px"
+                  style="min-width: 75px; max-width: 150px"
                   input-class="text-left text-h6"
                   @focus="$event.target.select()"
                 />
@@ -43,7 +43,7 @@
           </template>
           <template v-slot:body-cell-actions="props">
             <q-td :props="props" align="center">
-              <q-btn flat round dense color="negative" icon="delete" @click="confirmDelete(props.row)" />
+              <q-btn flat round dense size="sm" padding="xs" color="negative" icon="delete" @click="confirmDelete(props.row)" />
             </q-td>
           </template>
         </q-table>
@@ -64,7 +64,7 @@ const prices = ref([])
 
 const columns = [
   { name: 'index', label: '#', align: 'center', style: 'width: 60px' },
-  { name: 'item_name', label: 'PRODUCT', field: 'item_name', align: 'left', classes: 'text-subtitle1 text-weight-medium' },
+  { name: 'item_name', label: 'PRODUCT', field: 'item_name', align: 'left', classes: 'text-subtitle1 text-weight-medium', style: 'max-width: 130px; white-space: normal;' },
   { name: 'unit_price', label: 'PRICE', field: 'unit_price', align: 'left' },
   { name: 'actions', label: 'ACTIONS', align: 'center' },
 ]
