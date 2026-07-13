@@ -41,6 +41,7 @@
               label="Vegetable"
               outlined
               dense
+              behavior="menu"
               use-input
               hide-selected
               fill-input
