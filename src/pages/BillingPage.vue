@@ -135,7 +135,7 @@ import { supabase } from 'src/boot/supabase'
 const $q = useQuasar()
 
 const billNumber = ref('BILL-1001')
-const hotelName = ref('Grand Hotel')
+const hotelName = ref('Cinnamon Bey Hotel')
 const department = ref('Main Kitchen')
 const deptOptions = ['Main Kitchen', 'Bar', 'Staff']
 const prNumber = ref('')
@@ -159,7 +159,7 @@ const filterVegetables = (val, update) => {
   update(() => {
     const needle = val.toLowerCase()
     filteredOptions.value = vegItemsFromDB.value.filter(
-      v => v.item_name.toLowerCase().indexOf(needle) > -1
+      (v) => v.item_name.toLowerCase().indexOf(needle) > -1,
     )
   })
 }
@@ -205,7 +205,8 @@ const onVegSelect = (val) => {
 
 const addItem = () => {
   if (!selectedVeg.value || !qty.value) return
-  const itemName = typeof selectedVeg.value === 'object' ? selectedVeg.value.item_name : selectedVeg.value
+  const itemName =
+    typeof selectedVeg.value === 'object' ? selectedVeg.value.item_name : selectedVeg.value
   let price = 0
   let total = 0
   if (billType.value === 'with_price') {
@@ -253,7 +254,7 @@ const saveAndPrint = async () => {
       hotel_name: hotelName.value,
       department: department.value,
       pr_number: prNumber.value,
-      total_amount: grandTotal.value
+      total_amount: grandTotal.value,
     }
     const itemsList = billItems.value
     const formatNumber = (n) => Number(n || 0).toFixed(2)
@@ -267,7 +268,7 @@ const saveAndPrint = async () => {
             <td>${Number(it.qty || 0)}</td>
             <td>${formatNumber(it.unit_price)}</td>
             <td>${formatNumber(it.total_price)}</td>
-          </tr>`
+          </tr>`,
       )
       .join('')
 
@@ -357,7 +358,7 @@ const saveAndPrint = async () => {
       doc.open()
       doc.write(htmlContent)
       doc.close()
-      
+
       setTimeout(() => {
         try {
           iframe.contentWindow?.focus()
